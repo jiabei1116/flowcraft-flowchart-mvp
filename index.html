@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light" />
+  <meta name="theme-color" content="#ffffff" />
+  <title>FlowCraft - 产品流程图工具</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">跳到主要内容</a>
+
+  <main id="main-content" class="app-shell">
+    <section id="home-view" class="home-view" aria-labelledby="home-heading">
+      <header class="home-header">
+        <a class="brand" href="#" aria-label="FlowCraft 首页">
+          <span class="brand-mark" aria-hidden="true"><i data-lucide="workflow"></i></span>
+          <span>FlowCraft</span>
+        </a>
+        <div class="home-header-actions">
+          <button id="open-shortcuts" class="icon-button" type="button" aria-label="查看快捷键" title="快捷键">
+            <i data-lucide="keyboard"></i>
+          </button>
+          <span class="avatar" aria-label="当前用户：安妮">安</span>
+        </div>
+      </header>
+
+      <div class="home-content">
+        <section class="start-band">
+          <div>
+            <p class="eyebrow">产品流程工作台</p>
+            <h1 id="home-heading">把复杂流程，讲清楚</h1>
+            <p class="start-copy">从空白画布开始，或选择一个产品经理常用模板。</p>
+          </div>
+          <div class="start-actions">
+            <button id="new-blank" class="button primary" type="button">
+              <i data-lucide="plus"></i><span>新建空白流程图</span>
+            </button>
+            <button id="browse-templates" class="button secondary" type="button">
+              <i data-lucide="layout-template"></i><span>浏览模板</span>
+            </button>
+          </div>
+        </section>
+
+        <section id="template-section" class="content-section" aria-labelledby="template-heading">
+          <div class="section-heading-row">
+            <div>
+              <p class="section-kicker">快速开始</p>
+              <h2 id="template-heading">产品经理常用模板</h2>
+            </div>
+            <div class="template-tabs" role="tablist" aria-label="模板分类">
+              <button class="tab is-active" type="button" role="tab" aria-selected="true" data-template-filter="all">全部</button>
+              <button class="tab" type="button" role="tab" aria-selected="false" data-template-filter="product">产品流程</button>
+              <button class="tab" type="button" role="tab" aria-selected="false" data-template-filter="approval">审批流程</button>
+              <button class="tab" type="button" role="tab" aria-selected="false" data-template-filter="lane">泳道图</button>
+            </div>
+          </div>
+          <div id="template-grid" class="template-grid" aria-live="polite"></div>
+        </section>
+
+        <section class="content-section files-section" aria-labelledby="recent-heading">
+          <div class="section-heading-row">
+            <div>
+              <p class="section-kicker">自动保存在此浏览器</p>
+              <h2 id="recent-heading">最近文件</h2>
+            </div>
+            <label class="search-box" for="file-search">
+              <i data-lucide="search" aria-hidden="true"></i>
+              <span class="sr-only">搜索文件</span>
+              <input id="file-search" type="search" placeholder="搜索文件" autocomplete="off" />
+            </label>
+          </div>
+          <div id="file-list" class="file-list" aria-live="polite"></div>
+        </section>
+      </div>
+    </section>
+
+    <section id="editor-view" class="editor-view" hidden aria-label="流程图编辑器">
+      <header class="editor-topbar">
+        <div class="topbar-cluster topbar-left">
+          <button id="back-home" class="icon-button" type="button" aria-label="返回文件首页" title="返回文件首页">
+            <i data-lucide="arrow-left"></i>
+          </button>
+          <span class="mini-brand" aria-hidden="true"><i data-lucide="workflow"></i></span>
+          <label class="document-name-label" for="document-name">
+            <span class="sr-only">文件名</span>
+            <input id="document-name" class="document-name" value="未命名流程图" maxlength="60" />
+          </label>
+          <span id="save-status" class="save-status" role="status">已保存</span>
+        </div>
+
+        <div class="topbar-cluster history-controls" aria-label="编辑历史">
+          <button id="undo-button" class="icon-button" type="button" aria-label="撤销" title="撤销 Ctrl+Z"><i data-lucide="undo-2"></i></button>
+          <button id="redo-button" class="icon-button" type="button" aria-label="重做" title="重做 Ctrl+Shift+Z"><i data-lucide="redo-2"></i></button>
+          <span class="toolbar-divider" aria-hidden="true"></span>
+          <button class="tool-button is-active" type="button" data-mode="select" aria-pressed="true" title="选择工具 V">
+            <i data-lucide="mouse-pointer-2"></i><span>选择</span>
+          </button>
+          <button class="tool-button" type="button" data-mode="pan" aria-pressed="false" title="画布平移 H">
+            <i data-lucide="hand"></i><span>平移</span>
+          </button>
+          <button class="tool-button" type="button" data-mode="connect" aria-pressed="false" title="连线工具 C">
+            <i data-lucide="git-branch"></i><span>连线</span>
+          </button>
+        </div>
+
+        <div class="topbar-cluster topbar-right">
+          <button id="open-export" class="button ghost compact" type="button"><i data-lucide="download"></i><span>导出</span></button>
+          <button id="share-button" class="button primary compact" type="button"><i data-lucide="share-2"></i><span>分享</span></button>
+        </div>
+      </header>
+
+      <div id="readonly-banner" class="readonly-banner" hidden role="status">
+        <span><i data-lucide="eye"></i>你正在查看只读流程图</span>
+        <button id="copy-as-own" class="button secondary compact" type="button"><i data-lucide="copy-plus"></i><span>创建副本</span></button>
+      </div>
+
+      <div class="editor-workspace">
+        <aside id="shape-panel" class="side-panel shape-panel" aria-label="图形库">
+          <div class="panel-header">
+            <div>
+              <p class="panel-kicker">组件</p>
+              <h2>图形库</h2>
+            </div>
+            <button class="icon-button mobile-panel-close" type="button" data-close-panel aria-label="关闭图形库"><i data-lucide="x"></i></button>
+          </div>
+          <div class="panel-search">
+            <i data-lucide="search" aria-hidden="true"></i>
+            <label class="sr-only" for="shape-search">搜索图形</label>
+            <input id="shape-search" type="search" placeholder="搜索图形" autocomplete="off" />
+          </div>
+          <div id="shape-library" class="shape-library"></div>
+          <div class="palette-tip">
+            <i data-lucide="sparkles" aria-hidden="true"></i>
+            <p>拖入画布，或点击添加到视野中央。</p>
+          </div>
+        </aside>
+
+        <section class="canvas-region" aria-label="流程图画布区域">
+          <div class="canvas-toolbar" role="toolbar" aria-label="画布排版工具">
+            <button class="toolbar-icon" type="button" data-arrange="align-left" aria-label="左对齐" title="左对齐"><i data-lucide="align-start-vertical"></i></button>
+            <button class="toolbar-icon" type="button" data-arrange="align-center-x" aria-label="水平居中" title="水平居中"><i data-lucide="align-center-vertical"></i></button>
+            <button class="toolbar-icon" type="button" data-arrange="align-right" aria-label="右对齐" title="右对齐"><i data-lucide="align-end-vertical"></i></button>
+            <span class="toolbar-divider" aria-hidden="true"></span>
+            <button class="toolbar-icon" type="button" data-arrange="align-top" aria-label="顶部对齐" title="顶部对齐"><i data-lucide="align-start-horizontal"></i></button>
+            <button class="toolbar-icon" type="button" data-arrange="align-middle-y" aria-label="垂直居中" title="垂直居中"><i data-lucide="align-center-horizontal"></i></button>
+            <button class="toolbar-icon" type="button" data-arrange="align-bottom" aria-label="底部对齐" title="底部对齐"><i data-lucide="align-end-horizontal"></i></button>
+            <span class="toolbar-divider" aria-hidden="true"></span>
+            <button class="toolbar-icon" type="button" data-arrange="distribute-x" aria-label="水平分布" title="水平分布"><i data-lucide="columns-3"></i></button>
+            <button class="toolbar-icon" type="button" data-arrange="distribute-y" aria-label="垂直分布" title="垂直分布"><i data-lucide="rows-3"></i></button>
+            <button class="toolbar-icon" type="button" data-arrange="same-size" aria-label="匹配大小" title="匹配大小"><i data-lucide="scan"></i></button>
+            <span class="toolbar-divider" aria-hidden="true"></span>
+            <button class="toolbar-icon" type="button" data-arrange="group" aria-label="组合" title="组合 Ctrl+G"><i data-lucide="group"></i></button>
+            <button class="toolbar-icon" type="button" data-arrange="ungroup" aria-label="取消组合" title="取消组合 Ctrl+Shift+G"><i data-lucide="ungroup"></i></button>
+          </div>
+
+          <div id="canvas-wrap" class="canvas-wrap" tabindex="0" aria-label="流程图编辑画布。可用方向键移动选中图形。">
+            <svg id="diagram-canvas" class="diagram-canvas" xmlns="http://www.w3.org/2000/svg" aria-labelledby="canvas-title canvas-description">
+              <title id="canvas-title">流程图编辑画布</title>
+              <desc id="canvas-description">包含可拖动的节点与连线。双击节点可编辑文字。</desc>
+              <defs>
+                <pattern id="small-grid" width="16" height="16" patternUnits="userSpaceOnUse">
+                  <path d="M 16 0 L 0 0 0 16" fill="none" stroke="#e8ecef" stroke-width="1" />
+                </pattern>
+                <pattern id="large-grid" width="80" height="80" patternUnits="userSpaceOnUse">
+                  <rect width="80" height="80" fill="url(#small-grid)" />
+                  <path d="M 80 0 L 0 0 0 80" fill="none" stroke="#d9dfe4" stroke-width="1" />
+                </pattern>
+                <marker id="arrow-end" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke" />
+                </marker>
+                <marker id="arrow-start" viewBox="0 0 10 10" refX="1" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                  <path d="M 10 0 L 0 5 L 10 10 z" fill="context-stroke" />
+                </marker>
+              </defs>
+              <rect id="canvas-grid" x="-5000" y="-5000" width="10000" height="10000" fill="url(#large-grid)" />
+              <g id="viewport-group">
+                <g id="lane-layer"></g>
+                <g id="edge-layer"></g>
+                <g id="node-layer"></g>
+                <g id="selection-layer"></g>
+              </g>
+            </svg>
+            <div id="canvas-empty" class="canvas-empty" hidden>
+              <span class="empty-icon" aria-hidden="true"><i data-lucide="mouse-pointer-click"></i></span>
+              <h3>从一个节点开始</h3>
+              <p>从左侧拖入图形，或选择模板快速开始。</p>
+            </div>
+          </div>
+
+          <div class="canvas-bottom-left">
+            <button id="toggle-grid" class="status-button is-active" type="button" aria-pressed="true"><i data-lucide="grid-3x3"></i><span>网格</span></button>
+            <button id="toggle-snap" class="status-button is-active" type="button" aria-pressed="true"><i data-lucide="magnet"></i><span>吸附</span></button>
+          </div>
+          <div class="zoom-controls" aria-label="缩放控制">
+            <button id="zoom-out" class="icon-button small" type="button" aria-label="缩小" title="缩小"><i data-lucide="minus"></i></button>
+            <button id="zoom-reset" class="zoom-value" type="button" aria-label="重置缩放"><span id="zoom-label">100%</span></button>
+            <button id="zoom-in" class="icon-button small" type="button" aria-label="放大" title="放大"><i data-lucide="plus"></i></button>
+            <button id="zoom-fit" class="icon-button small" type="button" aria-label="适应内容" title="适应内容"><i data-lucide="maximize"></i></button>
+          </div>
+        </section>
+
+        <aside id="property-panel" class="side-panel property-panel" aria-label="属性面板">
+          <div class="panel-header">
+            <div>
+              <p class="panel-kicker">检查器</p>
+              <h2>样式与排版</h2>
+            </div>
+            <button class="icon-button mobile-panel-close" type="button" data-close-panel aria-label="关闭属性面板"><i data-lucide="x"></i></button>
+          </div>
+          <div class="property-tabs" role="tablist" aria-label="属性类型">
+            <button class="tab is-active" type="button" role="tab" aria-selected="true" data-property-tab="style">样式</button>
+            <button class="tab" type="button" role="tab" aria-selected="false" data-property-tab="page">页面</button>
+          </div>
+          <div id="property-content" class="property-content"></div>
+        </aside>
+
+        <nav class="mobile-editor-nav" aria-label="移动端编辑工具">
+          <button type="button" data-mobile-panel="shape"><i data-lucide="shapes"></i><span>图形</span></button>
+          <button type="button" data-mobile-mode="select" class="is-active"><i data-lucide="mouse-pointer-2"></i><span>选择</span></button>
+          <button type="button" data-mobile-mode="pan"><i data-lucide="hand"></i><span>平移</span></button>
+          <button type="button" data-mobile-panel="property"><i data-lucide="sliders-horizontal"></i><span>属性</span></button>
+        </nav>
+      </div>
+    </section>
+  </main>
+
+  <div id="modal-backdrop" class="modal-backdrop" hidden></div>
+
+  <dialog id="text-dialog" class="modal compact-modal" aria-labelledby="text-dialog-title">
+    <form method="dialog" id="text-form">
+      <div class="modal-header">
+        <div><p class="panel-kicker">节点内容</p><h2 id="text-dialog-title">编辑文字</h2></div>
+        <button class="icon-button" type="button" data-dialog-close="text-dialog" aria-label="关闭"><i data-lucide="x"></i></button>
+      </div>
+      <label class="field-label" for="node-text">节点文字</label>
+      <textarea id="node-text" rows="4" maxlength="160"></textarea>
+      <div class="modal-actions">
+        <button class="button secondary" type="button" data-dialog-close="text-dialog">取消</button>
+        <button class="button primary" value="confirm" type="submit">保存</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="export-dialog" class="modal" aria-labelledby="export-dialog-title">
+    <div class="modal-header">
+      <div><p class="panel-kicker">交付与汇报</p><h2 id="export-dialog-title">导出流程图</h2></div>
+      <button class="icon-button" type="button" data-dialog-close="export-dialog" aria-label="关闭"><i data-lucide="x"></i></button>
+    </div>
+    <div class="export-options">
+      <button type="button" data-export="png"><span class="export-icon"><i data-lucide="image"></i></span><span><strong>PNG 图片</strong><small>适合插入 PRD 和汇报文档</small></span><i data-lucide="chevron-right"></i></button>
+      <button type="button" data-export="svg"><span class="export-icon"><i data-lucide="file-code-2"></i></span><span><strong>SVG 矢量图</strong><small>无限缩放，适合继续编辑</small></span><i data-lucide="chevron-right"></i></button>
+      <button type="button" data-export="pdf"><span class="export-icon"><i data-lucide="file-text"></i></span><span><strong>PDF</strong><small>打开打印窗口并另存为 PDF</small></span><i data-lucide="chevron-right"></i></button>
+    </div>
+  </dialog>
+
+  <dialog id="share-dialog" class="modal" aria-labelledby="share-dialog-title">
+    <div class="modal-header">
+      <div><p class="panel-kicker">只读协作</p><h2 id="share-dialog-title">分享流程图</h2></div>
+      <button class="icon-button" type="button" data-dialog-close="share-dialog" aria-label="关闭"><i data-lucide="x"></i></button>
+    </div>
+    <div class="share-illustration" aria-hidden="true"><i data-lucide="link-2"></i></div>
+    <p class="modal-copy">链接包含当前流程图的只读快照。接收者无需登录即可查看，也可以创建自己的副本。</p>
+    <label class="field-label" for="share-url">只读链接</label>
+    <div class="copy-field">
+      <input id="share-url" readonly />
+      <button id="copy-share-url" class="button primary compact" type="button"><i data-lucide="copy"></i><span>复制</span></button>
+    </div>
+    <p id="share-feedback" class="inline-feedback" role="status"></p>
+  </dialog>
+
+  <dialog id="shortcuts-dialog" class="modal" aria-labelledby="shortcuts-title">
+    <div class="modal-header">
+      <div><p class="panel-kicker">提高效率</p><h2 id="shortcuts-title">键盘快捷键</h2></div>
+      <button class="icon-button" type="button" data-dialog-close="shortcuts-dialog" aria-label="关闭"><i data-lucide="x"></i></button>
+    </div>
+    <div class="shortcut-grid">
+      <span>撤销 / 重做</span><kbd>Ctrl Z</kbd><kbd>Ctrl Shift Z</kbd>
+      <span>复制 / 粘贴</span><kbd>Ctrl C</kbd><kbd>Ctrl V</kbd>
+      <span>组合 / 取消组合</span><kbd>Ctrl G</kbd><kbd>Ctrl Shift G</kbd>
+      <span>选择 / 平移 / 连线</span><kbd>V</kbd><kbd>H</kbd><kbd>C</kbd>
+      <span>删除</span><kbd>Delete</kbd><span></span>
+      <span>编辑文字</span><kbd>Enter</kbd><span></span>
+    </div>
+  </dialog>
+
+  <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
