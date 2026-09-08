@@ -6,7 +6,7 @@
   <meta name="color-scheme" content="light" />
   <meta name="theme-color" content="#ffffff" />
   <title>FlowCraft - 产品流程图工具</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=5" />
   <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
 </head>
 <body>
@@ -29,17 +29,17 @@
 
       <div class="home-content">
         <section class="start-band">
-          <div>
-            <p class="eyebrow">产品流程工作台</p>
-            <h1 id="home-heading">把复杂流程，讲清楚</h1>
-            <p class="start-copy">从空白画布开始，或选择一个产品经理常用模板。</p>
+          <div class="start-heading">
+            <p class="eyebrow">工作台</p>
+            <h1 id="home-heading">今天从哪个流程开始？</h1>
+            <p class="start-copy">创建新画布，或继续处理最近的流程图。</p>
           </div>
           <div class="start-actions">
             <button id="new-blank" class="button primary" type="button">
-              <i data-lucide="plus"></i><span>新建空白流程图</span>
+              <i data-lucide="plus"></i><span>新建流程图</span>
             </button>
             <button id="browse-templates" class="button secondary" type="button">
-              <i data-lucide="layout-template"></i><span>浏览模板</span>
+              <i data-lucide="layout-template"></i><span>从模板开始</span>
             </button>
           </div>
         </section>
@@ -47,8 +47,8 @@
         <section id="template-section" class="content-section" aria-labelledby="template-heading">
           <div class="section-heading-row">
             <div>
-              <p class="section-kicker">快速开始</p>
-              <h2 id="template-heading">产品经理常用模板</h2>
+              <p class="section-kicker">模板库</p>
+              <h2 id="template-heading">常用流程</h2>
             </div>
             <div class="template-tabs" role="tablist" aria-label="模板分类">
               <button class="tab is-active" type="button" role="tab" aria-selected="true" data-template-filter="all">全部</button>
@@ -63,7 +63,7 @@
         <section class="content-section files-section" aria-labelledby="recent-heading">
           <div class="section-heading-row">
             <div>
-              <p class="section-kicker">自动保存在此浏览器</p>
+              <p class="section-kicker">自动保存</p>
               <h2 id="recent-heading">最近文件</h2>
             </div>
             <label class="search-box" for="file-search">
@@ -162,11 +162,11 @@
               <desc id="canvas-description">包含可拖动的节点与连线。双击节点可编辑文字。</desc>
               <defs>
                 <pattern id="small-grid" width="16" height="16" patternUnits="userSpaceOnUse">
-                  <path d="M 16 0 L 0 0 0 16" fill="none" stroke="#e8ecef" stroke-width="1" />
+                  <path d="M 16 0 L 0 0 0 16" fill="none" stroke="#e3e7eb" stroke-width="1" />
                 </pattern>
                 <pattern id="large-grid" width="80" height="80" patternUnits="userSpaceOnUse">
                   <rect width="80" height="80" fill="url(#small-grid)" />
-                  <path d="M 80 0 L 0 0 0 80" fill="none" stroke="#d9dfe4" stroke-width="1" />
+                  <path d="M 80 0 L 0 0 0 80" fill="none" stroke="#d5dbe1" stroke-width="1" />
                 </pattern>
                 <marker id="arrow-end" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
                   <path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke" />
